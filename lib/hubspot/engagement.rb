@@ -134,6 +134,51 @@ module Hubspot
     end
   end
 
+  class EngagementMail < Engagement
+    def body
+      metadata['body']
+    end
+
+    def contact_ids
+      associations['contactIds']
+    end
+
+    def company_ids
+      associations['companyIds']
+    end
+
+    def deal_ids
+      associations['dealIds']
+    end
+
+    class << self
+      def create!(contact_vid, subject, from, to, html_body, deal_id = nil, time = nil)
+        data = {
+          engagement: {
+            type: 'EMAIL'
+          },
+          associations: {
+            contactIds: [contact_vid],
+            dealIds: [deal_id]
+          },
+          metadata: {
+            from: from,
+            to: to,
+            cc: [],
+            bcc: [],
+            subject: subject,
+            html: html_body,
+            text: ""
+          }
+        }
+
+        data[:engagement][:timestamp] = (time.to_i) * 1000 if time
+
+        super(data)
+      end
+    end
+  end
+
   class EngagementCall < Engagement
     def body
       metadata['body']
