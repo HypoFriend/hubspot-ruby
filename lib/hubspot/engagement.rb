@@ -158,12 +158,20 @@ module Hubspot
             type: 'EMAIL'
           },
           associations: {
+            companyIds: [],
             contactIds: [contact_vid],
-            dealIds: [deal_id]
+            dealIds: [deal_id],
+            ownerIds: []
           },
           metadata: {
-            from: from,
-            to: to,
+            from: {
+              email: from,
+              firstName: '',
+              lastName: ''
+            },
+            to: {
+              email: to
+            },
             cc: [],
             bcc: [],
             subject: subject,
