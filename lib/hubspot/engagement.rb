@@ -113,13 +113,15 @@ module Hubspot
     end
 
     class << self
-      def create!(contact_id, note_body, owner_id = nil)
+      def create!(contact_id, deal_id, note_body, time, owner_id = nil)
         data = {
           engagement: {
             type: 'NOTE'
           },
           associations: {
-            contactIds: [contact_id]
+            contactIds: [contact_vid],
+            dealIds: [deal_id],
+            ownerIds: [owner_id]
           },
           metadata: {
             body: note_body
@@ -127,6 +129,7 @@ module Hubspot
         }
 
         # if the owner id has been provided, append it to the engagement
+        data[:engagement][:timestamp] = (time.to_i) * 1000 if time
         data[:engagement][:owner_id] = owner_id if owner_id
 
         super(data)
